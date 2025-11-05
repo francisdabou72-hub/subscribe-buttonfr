@@ -1,0 +1,179 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Futuristic TikTok Buttons</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #0f0f0f;
+            font-family: 'Segoe UI', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            position: relative;
+            width: 320px;
+            height: 480px;
+            background: linear-gradient(135deg, #ff6ec4, #7873f5);
+            border-radius: 25px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            box-shadow: 0 0 40px #ff6ec4, 0 0 60px #7873f5;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        button {
+            position: relative;
+            padding: 10px 20px;
+            border-radius: 50px;
+            border: none;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+            text-shadow: 0 0 5px white;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+        }
+
+        button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 0 20px #00ffff, 0 0 40px #ff00ff;
+            transform: scale(1.1);
+        }
+
+        .finger {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background: url('finger.png') no-repeat center/contain;
+            pointer-events: none;
+        }
+
+        .profile {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            display: none;
+            border: 4px solid #00ffff;
+            object-fit: cover;
+            box-shadow: 0 0 20px #00ffff, 0 0 40px #ff00ff;
+            animation: fadeIn 1s forwards;
+        }
+
+        .username {
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+            display: none;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            animation: fadeIn 1s forwards;
+        }
+
+        .verify {
+            width: 20px;
+            height: 20px;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.5);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <img src="tok.jpg" class="profile" id="profile">
+        <div class="buttons">
+            <button id="subscribe">Subscribe</button>
+            <button id="like">Like</button>
+            <button id="share">Share</button>
+        </div>
+        <div class="finger" id="finger"></div>
+        <div class="username" id="username">
+            francisdaboufr <img src="ed.jpg" class="verify">
+        </div>
+    </div>
+
+    <script>
+        const finger = document.getElementById('finger');
+        const subscribeBtn = document.getElementById('subscribe');
+        const likeBtn = document.getElementById('like');
+        const shareBtn = document.getElementById('share');
+        const profile = document.getElementById('profile');
+        const username = document.getElementById('username');
+
+        const buttons = [subscribeBtn, likeBtn, shareBtn];
+        let index = 0;
+
+        function moveFinger(button, callback) {
+            const rect = button.getBoundingClientRect();
+            const containerRect = button.parentElement.parentElement.getBoundingClientRect();
+
+            const x = rect.left - containerRect.left + rect.width / 2 - 20;
+            const y = rect.top - containerRect.top - 50;
+
+            finger.style.transition = 'all 0.8s cubic-bezier(.68,-0.55,.27,1.55)';
+            finger.style.left = x + 'px';
+            finger.style.top = y + 'px';
+
+            setTimeout(() => {
+                button.style.background = '#00ffff';
+                button.style.boxShadow = '0 0 20px #00ffff, 0 0 40px #ff00ff';
+                setTimeout(() => {
+                    button.style.background = 'rgba(255,255,255,0.1)';
+                    button.style.boxShadow = '0 0 10px rgba(255,255,255,0.3)';
+                    callback();
+                }, 600);
+            }, 800);
+        }
+
+        function animateButtons() {
+            if (index >= buttons.length) {
+                profile.style.display = 'block';
+                setTimeout(() => {
+                    username.style.display = 'flex';
+                }, 1000);
+                return;
+            }
+            moveFinger(buttons[index], () => {
+                index++;
+                animateButtons();
+            });
+        }
+
+        window.onload = () => {
+            animateButtons();
+        };
+    </script>
+
+</body>
+
+</html>
